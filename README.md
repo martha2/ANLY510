@@ -1,4 +1,9 @@
 # ANLY510
+Github homework--
+Question 3--
+dat3=dat2
+dat3[,4][dat3[,3]==dat3[,4]]<-NA
+
 Question 1--
 > require(zoo)
 > dat2=transform(dirty_data,Area=na.locf(Area))
