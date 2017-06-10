@@ -1,0 +1,54 @@
+---
+title: "Github Homework"
+output: html_document
+---
+  *Github Homework Team 7*
+  *June 3 2017*
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data cleaning for street address dataset
+
+####Load the data
+```{r dirty_data}
+setwd("~/Downloads")
+file_location <- "dirty_data.csv"
+dirty_data <- read.csv(file_location)
+ 
+```
+
+#### Question 1 Populate the missing values in the Area variable with an appropriate values (Birmingham, Coventry, Dudley, Sandwell, Solihull, Walsall or Wolverhampton)
+
+```{r}
+require(zoo)
+dat2=transform(dirty_data,Area=na.locf(Area))
+```
+
+#### Question 2 Remove special characters, padding (the white space before and after the text) from Street 1 and Street 2 variables. Make sure the first letters of street names are capitalized and the street denominations are following the same standard (for example, all streets are indicated as “str.”, avenues as “ave.”, etc.
+
+```{r}
+dat2$Street=gsub("[^[:alnum:]///' ]", "", dat2$Street) 
+dat2$Street.2=gsub("[^[:alnum:]///' ]", "", dat2$Street.2) 
+dat2$Street.2=gsub(" ", "", dat2$Street.2) 
+dat2$Street <- gsub("^(\\w)(\\w+)", "\\U\\1\\L\\2",dat2$Street, perl = TRUE)
+dat2$Street.2 <- gsub("^(\\w)(\\w+)", "\\U\\1\\L\\2",dat2$Street.2, perl = TRUE)
+```
+
+####Question 3 If the value in Street 2 duplicates the value in Street 1, remove the value in Street 2
+
+```{r}
+dat3=dat2 
+dat3[,4][dat3[,3]==dat3[,4]]<-NA
+```
+
+####Question 4 Remove the “Strange HTML column”
+
+```{r}
+
+library("dplyr") 
+cleaned_data=select(dat3,-Strange.HTML)
+head(cleaned_data)
+```
